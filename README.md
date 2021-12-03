@@ -16,7 +16,7 @@
 
 - Play with it
 
-Install humao.rest-client vscode extensions, then play with ![client.http](client.http)
+Install humao.rest-client vscode extensions, then play with [client.http](client.http)
 
 References:
 - https://github.com/suborbital/atmo/blob/main/example-project
