@@ -1,0 +1,69 @@
+# the Directive is a complete description of your application, including all of its business logic.
+# appVersion should be updated for each new deployment of your app.
+# atmoVersion declares which version of Atmo is used for the `subo dev` command.
+
+identifier: com.suborbital.todo-atmos
+appVersion: v0.1.0
+atmoVersion: v0.4.2
+
+connections:
+  database:
+    type: postgresql
+    connectionString: postgresql://docker:docker@postgres:5432/docker
+
+queries:
+  - name: "SelectAllTodos"
+    query: |-
+      SELECT * from todos
+  - name: "SelectTodo"
+    query: |-
+      SELECT * from todos
+      WHERE id = $1
+  - name: "CreateTodo"
+    query: |-
+      INSERT INTO todos(title, is_complete)
+      VALUES ($1, CASE $2 WHEN 'true' THEN true ELSE false END)
+  - name: "UpdateTodo"
+    query: |-
+      UPDATE todos
+      SET title = $1, is_complete = CASE $2 WHEN 'true' THEN true ELSE false END
+      WHERE id = $3
+  - name: "DeleteTodo"
+    query: |-
+      DELETE FROM todos
+      WHERE id = $1
+  - name: "DeleteAllTodos"
+    query: |-
+      DELETE FROM todos
+
+handlers:
+  - type: request
+    resource: /todos
+    method: GET
+    steps:
+      - fn: getAllTodos
+  - type: request
+    resource: /todos/:id
+    method: GET
+    steps:
+      - fn: getTodo
+  - type: request
+    resource: /todos
+    method: POST
+    steps:
+      - fn: createTodo
+  - type: request
+    resource: /todos/:id
+    method: PUT
+    steps:
+      - fn: updateTodo
+  - type: request
+    resource: /todos/:id
+    method: DELETE
+    steps:
+      - fn: deleteTodo
+  - type: request
+    resource: /todos
+    method: DELETE
+    steps:
+      - fn: deleteAllTodos

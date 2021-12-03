@@ -1,0 +1,32 @@
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password
+      - APP_DB_USER=docker
+      - APP_DB_PASS=docker
+      - APP_DB_NAME=docker
+    volumes:
+      - ./data:/docker-entrypoint-initdb.d
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U docker"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  atmo-server:
+    image: suborbital/atmo:latest
+    container_name: atmo-server
+    entrypoint: atmo
+    environment:
+      - ATMO_HTTP_PORT=8080
+    ports:
+      - 8080:8080
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./todos:/home/atmo

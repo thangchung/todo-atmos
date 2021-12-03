@@ -1,0 +1,38 @@
+@host = http://localhost:8080
+
+###
+GET {{host}}/todos HTTP/1.1
+content-type: application/json
+
+###
+@id = 1
+
+###
+GET {{host}}/todos/{{id}} HTTP/1.1
+content-type: application/json
+
+###
+POST {{host}}/todos HTTP/1.1
+content-type: application/json
+
+{
+    "title": "todo 1001",
+    "is_complete": true
+}
+
+###
+PUT {{host}}/todos/{{id}} HTTP/1.1
+content-type: application/json
+
+{
+    "title": "todo 100",
+    "is_complete": true
+}
+
+###
+DELETE  {{host}}/todos/{{id}} HTTP/1.1
+content-type: application/json
+
+###
+DELETE  {{host}}/todos HTTP/1.1
+content-type: application/json
